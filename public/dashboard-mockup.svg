@@ -1,0 +1,43 @@
+<svg width="500" height="450" viewBox="0 0 500 450" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>ServiceFlow Dashboard Mockup</title>
+  <defs>
+    <linearGradient id="dashboardGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E0F2FE" />
+      <stop offset="100%" stop-color="#BEE1FF" />
+    </linearGradient>
+    <linearGradient id="dashboardGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4DAAFF" />
+      <stop offset="100%" stop-color="#2D79F3" />
+    </linearGradient>
+  </defs>
+
+  <rect width="500" height="450" rx="12" fill="#F9FAFB" />
+
+  <rect x="10" y="10" width="120" height="430" rx="12" fill="url(#dashboardGrad1)" />
+  <path d="M 30 50 C 50 40, 50 60, 70 50" stroke="#FFFFFF" stroke-width="3" fill="none" />
+  <path d="M 30 100 C 50 90, 50 110, 70 100" stroke="#FFFFFF" stroke-width="3" fill="none" />
+   <path d="M 30 150 C 50 140, 50 160, 70 150" stroke="#FFFFFF" stroke-width="3" fill="none" />
+
+  <rect x="140" y="10" width="350" height="60" rx="12" fill="white" />
+  <circle cx="160" cy="40" r="20" fill="url(#dashboardGrad2)" />
+  <text x="200" y="45" font-family="Poppins, sans-serif" font-size="20px" font-weight="bold" fill="#1E3A8A">ServiceFlow</text>
+
+  <rect x="140" y="80" width="350" height="360" rx="12" fill="#FFFFFF" />
+
+  <rect x="160" y="100" width="150" height="120" rx="8" fill="#F2F7FF" />
+     <rect x="170" y="120" width="100" height="15" rx="4" fill="#D1D5DB" />
+     <rect x="170" y="145" width="80" height="10" rx="4" fill="#E5E7EB" />
+    <path d="M 170 170 C 190 160, 210 180, 230 170" stroke="#3B82F6" stroke-width="2" fill="none" />
+
+
+    <rect x="330" y="100" width="140" height="120" rx="8" fill="#F2F7FF" />
+    <rect x="340" y="120" width="100" height="15" rx="4" fill="#D1D5DB" />
+    <rect x="340" y="145" width="80" height="10" rx="4" fill="#E5E7EB" />
+    <path d="M 340 170 C 360 180, 380 160, 400 170" stroke="#3B82F6" stroke-width="2" fill="none" />
+
+
+  <rect x="160" y="240" width="310" height="180" rx="8" fill="#F2F7FF" />
+   <rect x="170" y="260" width="200" height="15" rx="4" fill="#D1D5DB" />
+   <rect x="170" y="285" width="250" height="10" rx="4" fill="#E5E7EB" />
+   <rect x="170" y="305" width="220" height="10" rx="4" fill="#E5E7EB" />
+</svg>

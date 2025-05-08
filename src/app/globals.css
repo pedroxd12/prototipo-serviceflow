@@ -5,6 +5,32 @@
   --foreground: #171717;
 }
 
+/* Añade esto para la animación del header */
+@layer utilities {
+  @keyframes gradientFlow {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .animate-gradient-flow {
+    /* Define el gradiente con colores similares al original #1E40AF */
+    /* Puedes ajustar estos colores */
+    background-image: linear-gradient(
+      to right,
+      #1E40AF, /* Azul original */
+      #2563EB, /* Un azul un poco más brillante */
+      #1D4ED8, /* Otro tono de azul */
+      #1E40AF  /* Vuelve al original para un bucle suave */
+    );
+    /* El background-size debe ser mayor que 100% para que la animación sea visible */
+    background-size: 300% 100%;
+    /* Aplica la animación */
+    animation: gradientFlow 12s ease infinite; /* Ajusta la duración (12s) y el timing (ease) como prefieras */
+  }
+}
+
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

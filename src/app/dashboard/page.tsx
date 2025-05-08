@@ -136,7 +136,7 @@ export default function Dashboard() {
                 </div>
                 <div className="mt-4">
                   <Link 
-                    href="/payment-methods" 
+                    href="/dashboard/payment-methods" 
                     className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors block text-center"
                   >
                     Administrar Métodos de Pago

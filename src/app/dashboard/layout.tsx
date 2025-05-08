@@ -1,27 +1,27 @@
 "use client";
 
-import "./globals.css";
-import Image from "next/image";
-import Link from "next/link";
-import { motion } from "framer-motion";
-
 import { 
     User, 
     Settings,
     LogOut
-  } from "lucide-react";
+} from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
 
-
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
   return (
-      <html lang="es">
-          <body className="bg-white text-gray-900 font-sans">
-               {/* Header */}
+    <>
+      {/* Header */}
       <motion.header
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="bg-blue-900 text-white py-6 shadow-lg"
+        className="bg-gradient-to-r from-blue-700 to-blue-600 text-white py-6 shadow-lg"
       >
         <div className="container mx-auto px-4 flex justify-between items-center">
           <div className="flex items-center space-x-4">
@@ -34,11 +34,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <h1 className="text-2xl font-bold">Panel de Control</h1>
           </div>
           <div className="flex items-center space-x-4">
-            <Link href="/profile" className="hover:bg-blue-800 p-2 rounded-full">
+            <Link href="/dashboard/profile" className="hover:bg-blue-800 p-2 rounded-full">
               <User className="w-6 h-6" />
-            </Link>
-            <Link href="/settings" className="hover:bg-blue-800 p-2 rounded-full">
-              <Settings className="w-6 h-6" />
             </Link>
             <Link href="/" className="hover:bg-blue-800 p-2 rounded-full">
               <LogOut className="w-6 h-6" />
@@ -47,23 +44,18 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </motion.header>
 
-              <div className="p-6">{children}</div>
+      <div className="p-6">{children}</div>
 
-
-                 {/* Footer */}
+      {/* Footer */}
       <footer className="bg-gray-100 py-12">
         <div className="container mx-auto text-center">
           <p className="text-gray-600">© 2025 ServiceFlow. Todos los derechos reservados.</p>
           <div className="mt-4 space-x-4">
             <Link href="/privacy" className="text-gray-500 hover:text-blue-600">Privacidad</Link>
-            <Link href="#" className="text-gray-500 hover:text-blue-600">Términos y condiciones </Link>
+            <Link href="/terms" className="text-gray-500 hover:text-blue-600">Términos y condiciones </Link>
           </div>
         </div>
       </footer>
-
-      
-          </body>
-             
-      </html>
+    </>
   );
 }

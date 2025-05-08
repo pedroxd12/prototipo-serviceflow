@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
-import {Mail, Lock, ArrowRight,Loader2 } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useRouter } from 'next/navigation';
 
@@ -12,178 +12,280 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null); // Estado para mensajes de error
 
+  // Lógica de envío
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Add login logic here
-    console.log('Login attempt', { email, password });
+    if (isLoading) return; // Previene doble submit
+    setError(null); // Limpia errores previos
+    handleLogin(); // Inicia la lógica de login
   };
 
-
+  // Lógica de login (simulada)
   const handleLogin = () => {
     setIsLoading(true);
-    
-    // Simula un tiempo de carga
+    console.log('Login attempt', { email, password });
+
+    // Simula llamada a API
     setTimeout(() => {
-      router.push('/dashboard');
-    }, 2000); // 2 segundos de carga
+      // ---- Reemplaza esto con tu lógica de autenticación real ----
+      if (email === "abdiel@gmail.com" && password === "password") {
+        console.log("Login successful, redirecting...");
+        router.push('/dashboard');
+        // No necesitas setIsLoading(false) aquí si rediriges inmediatamente
+      } else {
+        console.log("Login failed");
+        setError("Correo electrónico o contraseña incorrectos.");
+        setIsLoading(false); // Detiene la carga si hay error
+      }
+      // ---- Fin de la lógica de autenticación ----
+    }, 2000);
+  };
+
+  // Variantes para animación escalonada del contenedor principal
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+        delayChildren: 0.2,
+        staggerChildren: 0.3,
+      }
+    }
+  };
+
+  // Variantes para los elementos hijos (izquierda/derecha)
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" }
+    }
+  };
+
+  // Variantes para los elementos del formulario
+  const formItemVariants = {
+     hidden: { opacity: 0, x: -15 },
+     visible: {
+       opacity: 1,
+       x: 0,
+       transition: { duration: 0.4, ease: "easeOut" }
+     }
   };
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-white min-h-screen flex items-center justify-center">
-      <motion.div 
-        className="container mx-auto px-4 py-16 grid md:grid-cols-2 gap-12 items-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8 }}
+    // Contenedor principal con gradiente y centrado
+    <div className="bg-gradient-to-br from-blue-50 via-white to-sky-50 min-h-screen flex items-center justify-center p-4">
+      <motion.div
+        className="container mx-auto max-w-4xl"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
       >
-        {/* Left Side - Logo and Description */}
-        <motion.div
-          initial={{ x: -50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          className="space-y-6 text-center md:text-left "
-        >
-          <Image 
-            src="/logo.svg" 
-            alt="ServiceFlow Logo" 
-            width={250} 
-            height={150} 
-            className="mx-auto md:mx-0"
-          />
-          
-          <h2 className="text-4xl font-extrabold text-blue-900 mb-4">
-            Bienvenido a ServiceFlow
-          </h2>
-          
-          <p className="text-xl text-gray-600 leading-relaxed">
-            Accede a la plataforma. 
-          </p>
-          
-          <div className="flex flex-col space-y-4 mt-8">
-            <div className="flex items-center space-x-3 text-blue-600">
-              <Lock className="w-6 h-6" />
-              <span>Acceso seguro y protegido</span>
-            </div>
-          </div>
-        </motion.div>
+        {/* Grid principal para layout de dos columnas */}
+        <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
 
-        {/* Right Side - Login Form */}
-        <motion.div
-          initial={{ x: 50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-        >
-          <form 
-            onSubmit={handleSubmit}
-            className="bg-white p-8 rounded-xl shadow-xl space-y-6"
+          {/* --- Lado Izquierdo - Logo y Descripción --- */}
+          <motion.div
+            variants={itemVariants}
+            className="space-y-6 flex flex-col" // Flex column para controlar hijos
           >
-            <h3 className="text-2xl font-bold text-blue-900 text-center mb-4">
-              Iniciar Sesión
-            </h3>
+             {/* Contenedor para el Logo con Flexbox para centrado/alineación */}
+             <div className="flex justify-center md:justify-start">
+                <motion.div // Animación aplicada al contenedor del logo
+                  initial={{ scale: 0.95, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.4, duration: 0.5, type: 'spring', stiffness: 150 }}
+                >
+                  <Image
+                    src="/logo.svg" // Asegúrate que la ruta sea correcta
+                    alt="ServiceFlow Logo"
+                    width={230}
+                    height={130}
+                    priority // Carga prioritaria
+                    // Quitar clases de margen auto aquí, se controla en el div padre
+                  />
+                </motion.div>
+             </div>
 
-            {/* Email Input */}
-            <div className="space-y-2">
-              <label htmlFor="email" className="text-gray-700 flex items-center space-x-2">
-                <Mail className="w-5 h-5 text-blue-600" />
-                <span>Correo Electrónico</span>
-              </label>
-              <div className="relative">
-                <input 
-                  type="email" 
-                  id="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  placeholder="usuario@ejemplo.com"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-              </div>
-            </div>
+             {/* Contenedor para el texto con alineación controlada */}
+             <div className="text-center md:text-left">
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-blue-900 leading-tight">
+                  Bienvenido de nuevo
+                </h2>
+                <p className="mt-4 text-lg text-gray-600 leading-relaxed">
+                  Accede a tu cuenta para gestionar tus servicios de forma eficiente.
+                </p>
+             </div>
+          </motion.div>
 
-            {/* Password Input */}
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-gray-700 flex items-center space-x-2">
-                <Lock className="w-5 h-5 text-blue-600" />
-                <span>Contraseña</span>
-              </label>
-              <div className="relative">
-                <input 
-                  type="password" 
-                  id="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  placeholder="••••••••"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
-                />
-              </div>
-            </div>
-
-            {/* Forgot Password Link */}
-            <div className="text-right">
-              <Link 
-                href="/password" 
-                className="text-blue-600 hover:text-blue-800 transition-colors text-sm"
+          {/* --- Lado Derecho - Formulario de Login --- */}
+          <motion.div
+            variants={itemVariants}
+            layout // Permite animaciones de layout si el tamaño cambia
+          >
+            <motion.form
+              onSubmit={handleSubmit}
+              className="bg-white p-8 rounded-xl shadow-xl border border-gray-100/80 space-y-6"
+              initial="hidden"
+              animate="visible"
+              variants={{
+                visible: { transition: { staggerChildren: 0.1 } }
+              }}
+              noValidate // Deshabilita validación HTML5 si manejas todo en JS
+            >
+              <motion.h3
+                variants={formItemVariants}
+                className="text-2xl font-bold text-blue-900 text-center mb-4"
               >
-                ¿Olvidaste tu contraseña?
-              </Link>
-            </div>
+                Iniciar Sesión
+              </motion.h3>
 
-           {/* Submit Button */}
-        <motion.button
-          type="button"
-          onClick={handleLogin}
-          disabled={isLoading}
-          whileHover={{ scale: isLoading ? 1 : 1.05 }}
-          whileTap={{ scale: isLoading ? 1 : 0.95 }}
-          className={`
-            w-full px-6 py-3 rounded-lg shadow-lg transition-all 
-            flex items-center justify-center group
-            ${isLoading 
-              ? 'bg-blue-500 text-white cursor-not-allowed' 
-              : 'bg-blue-600 text-white hover:bg-blue-700'
-            }
-          `}
-        >
-          {isLoading ? (
-  <div className="flex items-center">
-    <motion.div
-      style={{ display: "inline-block" }} // Asegura que la rotación sea sobre su propio eje
-      initial={{ rotate: 0 }}
-      animate={{ rotate: 360 }}
-      transition={{ 
-        repeat: Infinity, 
-        duration: 1, 
-        ease: "linear" 
-      }}
-    >
-      <Loader2 className="mr-2" />
-    </motion.div>
-    Validando...
-  </div>
-) : (
-  <>
-    Iniciar Sesión
-    <ArrowRight className="ml-2 group-hover:translate-x-1 transition-transform" />
-  </>
-)}
+              {/* Email Input */}
+              <motion.div className="space-y-2" variants={formItemVariants}>
+                <label htmlFor="email" className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <Mail className="w-4 h-4 text-blue-600" />
+                  <span>Correo Electrónico</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type="email"
+                    id="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    autoComplete="email"
+                    placeholder="tu@ejemplo.com"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:border-gray-400 transition-colors duration-200 ease-in-out text-base" // Asegura tamaño de texto base
+                  />
+                </div>
+              </motion.div>
 
-        </motion.button>
+              {/* Password Input */}
+              <motion.div className="space-y-2" variants={formItemVariants}>
+                <label htmlFor="password" className="text-sm font-medium text-gray-700 flex items-center space-x-2">
+                  <Lock className="w-4 h-4 text-blue-600" />
+                  <span>Contraseña</span>
+                </label>
+                <div className="relative">
+                  <input
+                    type="password"
+                    id="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                    autoComplete="current-password"
+                    placeholder="••••••••"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent hover:border-gray-400 transition-colors duration-200 ease-in-out text-base" // Asegura tamaño de texto base
+                  />
+                </div>
+              </motion.div>
 
-            {/* Register Prompt */}
-            <div className="text-center text-gray-600 mt-4">
-              ¿No tienes una cuenta? 
-              <Link 
-                href="/register" 
-                className="text-blue-600 hover:text-blue-800 ml-2 transition-colors"
-              >
-                Regístrate
-              </Link>
-            </div>
-          </form>
-        </motion.div>
-      </motion.div>
-    </div>
+               {/* Mensaje de Error */}
+               <AnimatePresence>
+                 {error && (
+                    <motion.div
+                      initial={{ opacity: 0, y: -10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -5 }}
+                      className="text-red-600 text-sm text-center bg-red-50 p-2 rounded-md border border-red-200"
+                    >
+                      {error}
+                    </motion.div>
+                 )}
+               </AnimatePresence>
+
+              {/* Forgot Password Link */}
+              <motion.div variants={formItemVariants} className="text-right">
+                <Link
+                  href="/password" // Ruta para recuperar contraseña
+                  className="text-sm text-blue-600 hover:text-blue-800 hover:underline transition-colors duration-200 ease-in-out"
+                >
+                  ¿Olvidaste tu contraseña?
+                </Link>
+              </motion.div>
+
+              {/* Submit Button */}
+              <motion.div variants={formItemVariants}>
+                <motion.button
+                  type="submit"
+                  disabled={isLoading}
+                  whileHover={{ scale: isLoading ? 1 : 1.03 }}
+                  whileTap={{ scale: isLoading ? 1 : 0.98 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  // Aplicar altura fija (h-12 es 48px) y overflow-hidden
+                  className={`
+                    w-full h-12 px-6 rounded-lg shadow-md transition-all duration-300 ease-in-out
+                    flex items-center justify-center group font-medium relative overflow-hidden
+                    focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
+                    ${isLoading
+                      ? 'bg-blue-400 text-white cursor-not-allowed'
+                      : 'bg-blue-600 text-white hover:bg-blue-700 hover:shadow-lg'
+                    }
+                  `}
+                >
+                  {/* AnimatePresence maneja la transición entre estados */}
+                  <AnimatePresence mode="wait" initial={false}>
+                    {isLoading ? (
+                      // Estado de Carga
+                      <motion.div
+                        key="loading" // Clave única para AnimatePresence
+                        initial={{ opacity: 0, y: 5 }} // Ligeramente desde abajo
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -5 }} // Ligeramente hacia arriba
+                        transition={{ duration: 0.2 }}
+                        className="flex items-center justify-center absolute inset-0" // Posición absoluta para superponerse
+                      >
+                        <motion.div
+                           key="loader-icon-rotate" // Key única para el elemento que rota
+                           animate={{ rotate: 360 }}
+                           transition={{
+                             repeat: Infinity,
+                             duration: 1,
+                             ease: "linear"
+                           }}
+                           style={{ display: 'inline-block' }} // Necesario para rotación correcta
+                        >
+                           <Loader2 className="h-5 w-5" /> {/* Sin margen extra aquí */}
+                        </motion.div>
+                        <span className="ml-2">Validando...</span> {/* Texto al lado */}
+                      </motion.div>
+                    ) : (
+                      // Estado Normal
+                      <motion.span
+                        key="login" // Clave única para AnimatePresence
+                        initial={{ opacity: 0, y: -5 }} // Ligeramente desde arriba
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 5 }} // Ligeramente hacia abajo
+                        transition={{ duration: 0.2 }}
+                        className="flex items-center"
+                      >
+                        Iniciar Sesión
+                        <ArrowRight className="ml-2 h-5 w-5 transform transition-transform duration-200 ease-in-out group-hover:translate-x-1" />
+                      </motion.span>
+                    )}
+                  </AnimatePresence>
+                </motion.button>
+              </motion.div>
+
+              {/* Register Prompt */}
+              <motion.div variants={formItemVariants} className="text-center text-sm text-gray-600 pt-4">
+                ¿No tienes una cuenta?
+                <Link
+                  href="/register" // Ruta para registrarse
+                  className="font-medium text-blue-600 hover:text-blue-800 hover:underline ml-1 transition-colors duration-200 ease-in-out"
+                >
+                  Regístrate
+                </Link>
+              </motion.div>
+            </motion.form>
+          </motion.div>
+
+        </div> {/* Fin del grid principal */}
+      </motion.div> {/* Fin del contenedor animado */}
+    </div> // Fin del contenedor de fondo
   );
 }
